@@ -12,6 +12,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@tensorflow-models/handpose": "^0.0.7",
+    "@tensorflow/tfjs": "^3.2.0",
+    "@tensorflow/tfjs-backend-webgl": "^3.2.0",
+    "@tensorflow/tfjs-converter": "^3.2.0",
+    "@tensorflow/tfjs-core": "^3.2.0",
     "acorn": "^8.0.5",
     "ajv": "^6.12.6",
     "ajv-keywords": "^3.5.2",

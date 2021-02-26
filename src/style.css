@@ -29,11 +29,15 @@ a {
 }
 
 #video {
-  visibility: hidden;
   position: absolute;
+  /* visibility: hidden; */
+  /* display: none; */
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
-#canvas {
+#canvas, #canvasVideo {
+  position: absolute;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
