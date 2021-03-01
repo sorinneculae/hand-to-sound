@@ -30,8 +30,7 @@ a {
 
 #video {
   position: absolute;
-  /* visibility: hidden; */
-  /* display: none; */
+  visibility: hidden;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
