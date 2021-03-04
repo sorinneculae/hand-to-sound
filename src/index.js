@@ -1,12 +1,18 @@
 import './style.css';
 
-import { drawHand } from "./utilities";
+import { drawHand, drawOctave } from "./utilities";
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext("2d");
+const canvasVideo = document.getElementById('canvasVideo');
+const piano = document.getElementById('piano');
+const ctx = canvas.getContext('2d');
+const ctxVideo = canvasVideo.getContext('2d');
 let canvasWidth;
 let canvasHeight;
+
+const howManyOctaves = 4;
+const startingNote = 60;
 
 function startVideo() {
   navigator.getUserMedia(
@@ -24,11 +30,21 @@ function startVideo() {
   if (playPromise) {
     playPromise.then(response => {
       const videoRatio = video.offsetWidth / video.offsetHeight;
-      canvas.width = 780;
-      canvas.height = canvas.width / videoRatio;
+      canvas.width = canvasVideo.width = 780;
+      canvas.height = canvasVideo.height = canvas.width / videoRatio;
       canvasWidth = canvas.width;
       canvasHeight = canvas.height;
       detect();
+      piano.style.width = `${ canvasWidth }px`;
+      piano.style.height = `${ canvasHeight }px`;
+
+      const originX = piano.getBoundingClientRect().x;
+      const originY = piano.getBoundingClientRect().y;
+
+      for (let i=0; i<howManyOctaves; i++) {
+        drawOctave(i, startingNote, originX, originY);
+      }
+
     })
     .catch(error => { console.error(error) });
   }
@@ -37,14 +53,14 @@ function startVideo() {
 startVideo();
 
 function onResults(results) {
-  drawHand(results, ctx, canvasWidth, canvasHeight);
+  drawHand(results, ctx, ctxVideo, canvasWidth, canvasHeight);
 }
 
 const holistic = new Holistic({locateFile: (file) => {
   return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.1/${file}`;
 }});
 holistic.setOptions({
-  selfieMode: false,
+  selfieMode: true,
   upperBodyOnly: true,
   smoothLandmarks: true,
   minDetectionConfidence: 0.5,

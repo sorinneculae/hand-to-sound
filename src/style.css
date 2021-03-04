@@ -28,15 +28,62 @@ a {
   align-items: center;
 }
 
-#video {
+.vid {
   position: absolute;
-  visibility: hidden;
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
 }
 
-#canvas, #canvasVideo {
+
+#video {
+  visibility: hidden;
+}
+
+#piano {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.octave {
+  display: flex;
+}
+
+.octave-semitones {
+  display: flex;
   position: absolute;
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+}
+
+.octave-tones {
+  display: flex;
+  position: relative;
+}
+
+.tone, .semitone {
+  width: 26px;
+  box-sizing: border-box;
+}
+
+.tone {
+  height: 170px;
+  background-color: white;
+  border: 1px solid #CCC;
+  border-top-color: #FFF;
+}
+
+.semitone {
+  height: 100px;
+  background-color: black;
+  border: 1px solid #FFF;
+}
+
+.key-active {
+  background-color: indianred;
+}
+
+.semitone:nth-child(3) {
+  margin-left: 26px;
+}
+
+.semitone:nth-child(1) {
+  margin-left: 13px;
 }
