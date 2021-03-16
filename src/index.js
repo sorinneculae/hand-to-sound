@@ -1,36 +1,44 @@
-import './style.css';
+import "./style.css";
 
 import { drawHand } from "./utilities";
+import { thumbFinger } from "./utilities";
+import { firstFinger } from "./utilities";
+import { secondFinger } from "./utilities";
+import { fourthFinger } from "./utilities";
+import { isHandOpen } from "./utilities";
 
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let canvasWidth;
 let canvasHeight;
 
 function startVideo() {
   navigator.getUserMedia(
-    { 
+    {
       audio: true,
       video: {
         width: { min: 780, ideal: 780, max: 1024 },
-        height: { min: 438, ideal: 438, max: 576 }
-      }
+        height: { min: 438, ideal: 438, max: 576 },
+      },
     },
-    stream => video.srcObject = stream,
-    err => console.error(err)
+    (stream) => (video.srcObject = stream),
+    (err) => console.error(err)
   );
-  const playPromise = document.querySelector('video').play();
+  const playPromise = document.querySelector("video").play();
   if (playPromise) {
-    playPromise.then(response => {
-      const videoRatio = video.offsetWidth / video.offsetHeight;
-      canvas.width = 780;
-      canvas.height = canvas.width / videoRatio;
-      canvasWidth = canvas.width;
-      canvasHeight = canvas.height;
-      detect();
-    })
-    .catch(error => { console.error(error) });
+    playPromise
+      .then((response) => {
+        const videoRatio = video.offsetWidth / video.offsetHeight;
+        canvas.width = 780;
+        canvas.height = canvas.width / videoRatio;
+        canvasWidth = canvas.width;
+        canvasHeight = canvas.height;
+        detect();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 }
 
@@ -38,17 +46,32 @@ startVideo();
 
 function onResults(results) {
   drawHand(results, ctx, canvasWidth, canvasHeight);
+  if (isHandOpen(results)) {
+    console.log("Hello!");
+  } else {
+    if (thumbFinger(results)) {
+      console.log("Like!");
+    }
+    if (firstFinger(results) && secondFinger(results)) {
+      console.log("Peace!");
+    }
+    if (firstFinger(results) && fourthFinger(results)) {
+      console.log("Rock on!");
+    }
+  }
 }
 
-const holistic = new Holistic({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.1/${file}`;
-}});
+const holistic = new Holistic({
+  locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.1/${file}`;
+  },
+});
 holistic.setOptions({
   selfieMode: false,
   upperBodyOnly: true,
   smoothLandmarks: true,
   minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5
+  minTrackingConfidence: 0.5,
 });
 holistic.onResults(onResults);
 
