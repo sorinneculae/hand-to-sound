@@ -1,18 +1,15 @@
 import './style.css';
 
-import { drawHand, drawOctave } from "./utilities";
+import { drawHand, drawGrid } from "./utilities";
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const canvasVideo = document.getElementById('canvasVideo');
-const piano = document.getElementById('piano');
+const grid = document.getElementById('grid');
 const ctx = canvas.getContext('2d');
 const ctxVideo = canvasVideo.getContext('2d');
 let canvasWidth;
 let canvasHeight;
-
-const howManyOctaves = 4;
-const startingNote = 60;
 
 function startVideo() {
   navigator.getUserMedia(
@@ -35,15 +32,10 @@ function startVideo() {
       canvasWidth = canvas.width;
       canvasHeight = canvas.height;
       detect();
-      piano.style.width = `${ canvasWidth }px`;
-      piano.style.height = `${ canvasHeight }px`;
 
-      const originX = piano.getBoundingClientRect().x;
-      const originY = piano.getBoundingClientRect().y;
-
-      for (let i=0; i<howManyOctaves; i++) {
-        drawOctave(i, startingNote, originX, originY);
-      }
+      const originX = grid.getBoundingClientRect().x;
+      const originY = grid.getBoundingClientRect().y;
+      drawGrid(originX, originY);
 
     })
     .catch(error => { console.error(error) });

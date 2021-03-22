@@ -1,57 +1,10 @@
 // Points for fingers
+const gridContainer = document.getElementById('grid');
+let gridCell;
 const points = [4, 8, 12, 16, 20];
 // const points = [8];
-let allKeys = [];
+let allCells = [];
 const origins = {};
-const noteToPlay = {};
-const letterNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-const sampler = new Tone.Sampler({
-  urls: {
-      A0: "A0.mp3",
-      C1: "C1.mp3",
-      "D#1": "Ds1.mp3",
-      "F#1": "Fs1.mp3",
-      A1: "A1.mp3",
-      C2: "C2.mp3",
-      "D#2": "Ds2.mp3",
-      "F#2": "Fs2.mp3",
-      A2: "A2.mp3",
-      C3: "C3.mp3",
-      "D#3": "Ds3.mp3",
-      "F#3": "Fs3.mp3",
-      A3: "A3.mp3",
-      C4: "C4.mp3",
-      "D#4": "Ds4.mp3",
-      "F#4": "Fs4.mp3",
-      A4: "A4.mp3",
-      C5: "C5.mp3",
-      "D#5": "Ds5.mp3",
-      "F#5": "Fs5.mp3",
-      A5: "A5.mp3",
-      C6: "C6.mp3",
-      "D#6": "Ds6.mp3",
-      "F#6": "Fs6.mp3",
-      A6: "A6.mp3",
-      C7: "C7.mp3",
-      "D#7": "Ds7.mp3",
-      "F#7": "Fs7.mp3",
-      A7: "A7.mp3",
-      C8: "C8.mp3"
-  },
-  release: 1,
-  baseUrl: "https://tonejs.github.io/audio/salamander/"
-}).toDestination();
-const synth1 = new Tone.Synth().toDestination();
-const synth2 = new Tone.MembraneSynth().toDestination();
-const synth3 = new Tone.MonoSynth({
-	oscillator: {
-		type: "square"
-	},
-	envelope: {
-		attack: 0.1
-	}
-}).toDestination();
 
 // Drawing function
 export const drawHand = (results, ctx, ctxVideo, w, h) => {
@@ -97,72 +50,49 @@ export const drawHand = (results, ctx, ctxVideo, w, h) => {
 // -------------------------------------------------------------------------
 
 export const checkTouch = (allPoints) =>  {
-  allKeys.forEach(k => {
-    const note = k.getAttribute('note');
-    const letterNote = k.getAttribute('letter-note');
+allCells.forEach(cell => {
     let activate = false;
-    Object.values(allPoints).forEach(p => {
-      const bBox = k.getBoundingClientRect();
-      if (p.x > bBox.x - origins.x && p.x < bBox.x - origins.x + bBox.width &&
-          p.y > bBox.y - origins.y && p.y < bBox.y - origins.y + bBox.height) {
+    Object.values(allPoints).forEach(point => {
+      const bBox = cell.getBoundingClientRect();
+      if (point.x > bBox.x - origins.x && point.x < bBox.x - origins.x + bBox.width &&
+          point.y > bBox.y - origins.y && point.y < bBox.y - origins.y + bBox.height) {
         activate = true;
-        if (k.classList.contains('tone') && p.y < bBox.y - origins.y + 100) {
+        if (point.y < bBox.y - origins.y + 100) {
           activate = false;
         }
       }
     })
     if (activate) {
-      if (!noteToPlay[note].active) {
-        k.classList.add('key-active');
-        noteToPlay[note].active = true;
-        sampler.triggerAttackRelease(letterNote, 4);
-        // synth1.triggerAttackRelease(letterNote, 0.5);
-        // synth2.triggerAttackRelease(letterNote, 0.5);
-        // synth3.triggerAttackRelease(letterNote, 0.5);
-      }
+        cell.setAttribute('data-selected', true);
     } else {
-      k.classList.remove('key-active');
-      noteToPlay[note].active = false;
+        cell.setAttribute('data-selected', false);
     }
   });
 }
 
-// -------------------------------------------------------------------------
-// -------------------------------------------------------------------------
-
-export const drawOctave = (octaveIndex, startingNote, originX, originY) => {
+export const drawGrid = (originX, originY) => {
   origins.x = originX;
   origins.y = originY;
 
-  const piano = document.getElementById('piano');
-  const octave = document.createElement('div');
-  octave.classList.add('octave');
-  piano.appendChild(octave);
-  
-  const tones = document.createElement('div');
-  tones.classList.add('octave-tones');
-  octave.appendChild(tones);
+    for (let i = 0; i < 35; i++) {
+        gridCell = document.createElement('div');
+        gridCell.setAttribute('data-selected', 'false');
+        gridContainer.appendChild(gridCell);
+        allCells.push(gridCell);
+    }
+}
 
-  const semiTones = document.createElement('div');
-  semiTones.classList.add('octave-semitones');
-  octave.appendChild(semiTones);
+function toggleColor(event) {
+    let gridCellElement = event.currentTarget,
+        isCellSelected = gridCellElement.getAttribute('data-selected'),
+        randomColor;
 
-  const semiTonesIndex = [1, 3, 6, 8, 10];
-
-  for (let i=0; i<12; i++) {
-    let note = startingNote + (12 * octaveIndex) + i;
-    const toneDiv = document.createElement('div');
-    toneDiv.setAttribute('note', note);
-    toneDiv.setAttribute('letter-note', `${ letterNotes[i] }${ octaveIndex + 3 }`);
-      
-    if (semiTonesIndex.includes(i)) {
-      toneDiv.classList.add('semitone');
-      semiTones.appendChild(toneDiv);
+    if (isCellSelected == 'false') {
+        randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        gridCellElement.style.backgroundColor = '#' + randomColor;
     } else {
-      toneDiv.classList.add('tone');
-      tones.appendChild(toneDiv);
-    }    
-    allKeys.push(toneDiv);
-    noteToPlay[note] = { note };
-  }
+        gridCellElement.style.backgroundColor = 'transparent';
+    }
+
+    gridCellElement.setAttribute('data-selected', isCellSelected == 'false' ? 'true' : 'false');
 }
