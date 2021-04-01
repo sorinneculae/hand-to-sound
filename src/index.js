@@ -1,23 +1,24 @@
 import './style.css';
 
-import { drawHand, drawOctave } from "./utilities";
+import { drawHand, drawOctaves } from "./utilities";
 
 const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const canvasVideo = document.getElementById('canvasVideo');
 const piano = document.getElementById('piano');
-const ctx = canvas.getContext('2d');
+
+const canvasVideo = document.getElementById('canvasVideo');
+const canvasGrid = document.getElementById('canvasGrid');
+const canvasGesture = document.getElementById('canvasGesture');;
 const ctxVideo = canvasVideo.getContext('2d');
+const ctxGrid = canvasGrid.getContext('2d');
+const ctxGesture = canvasGesture.getContext('2d');
+
 let canvasWidth;
 let canvasHeight;
-
-const howManyOctaves = 4;
-const startingNote = 60;
 
 function startVideo() {
   navigator.getUserMedia(
     { 
-      audio: true,
+      audio: false,
       video: {
         width: { min: 780, ideal: 780, max: 1024 },
         height: { min: 438, ideal: 438, max: 576 }
@@ -30,10 +31,10 @@ function startVideo() {
   if (playPromise) {
     playPromise.then(response => {
       const videoRatio = video.offsetWidth / video.offsetHeight;
-      canvas.width = canvasVideo.width = 780;
-      canvas.height = canvasVideo.height = canvas.width / videoRatio;
-      canvasWidth = canvas.width;
-      canvasHeight = canvas.height;
+      canvasGrid.width = canvasGesture.width = canvasVideo.width = 780;
+      canvasGrid.height = canvasGesture.height = canvasVideo.height = canvasVideo.width / videoRatio;
+      canvasWidth = canvasVideo.width;
+      canvasHeight = canvasVideo.height;
       detect();
       piano.style.width = `${ canvasWidth }px`;
       piano.style.height = `${ canvasHeight }px`;
@@ -41,9 +42,7 @@ function startVideo() {
       const originX = piano.getBoundingClientRect().x;
       const originY = piano.getBoundingClientRect().y;
 
-      for (let i=0; i<howManyOctaves; i++) {
-        drawOctave(i, startingNote, originX, originY);
-      }
+      drawOctaves(originX, originY);
 
     })
     .catch(error => { console.error(error) });
@@ -53,7 +52,7 @@ function startVideo() {
 startVideo();
 
 function onResults(results) {
-  drawHand(results, ctx, ctxVideo, canvasWidth, canvasHeight);
+  drawHand(results, ctxVideo, ctxGrid, ctxGesture, canvasWidth, canvasHeight);
 }
 
 const holistic = new Holistic({locateFile: (file) => {
@@ -68,7 +67,21 @@ holistic.setOptions({
 });
 holistic.onResults(onResults);
 
+// const hands = new Hands({
+//   locateFile: (file) => {
+//       return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+//   }
+// });
+// hands.setOptions({
+//   maxNumHands: 2,
+//   selfieMode: true,
+//   minDetectionConfidence: 0.8,
+//   minTrackingConfidence: 0.5
+// });
+// hands.onResults(onResults);
+
 const detect = async () => {
   await holistic.send({ image: video });
+  // await hands.send({ image: video });
   requestAnimationFrame(detect);
 };

@@ -25,7 +25,7 @@ a {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .vid {
@@ -39,35 +39,28 @@ a {
 
 #piano {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   opacity: 0.7;
+  padding-left: 50px;
+  position: relative;
 }
 
 .octave {
   display: flex;
 }
 
-.octave-semitones {
-  display: flex;
-  position: absolute;
-}
-
-.octave-tones {
-  display: flex;
-  position: relative;
-}
-
 .tone, .semitone {
-  width: 26px;
+  width: 35px;
   box-sizing: border-box;
 }
 
 .tone {
-  height: 170px;
+  height: 25px;
   background-color: white;
-  border: 1px solid #CCC;
-  border-top-color: #FFF;
+  /* border: 0.1px solid #CCC; */
+  margin: 1px;
 }
 
 .semitone {
@@ -77,7 +70,7 @@ a {
 }
 
 .key-active {
-  background-color: indianred;
+  background-color: green;
 }
 
 .semitone:nth-child(3) {
@@ -86,4 +79,18 @@ a {
 
 .semitone:nth-child(1) {
   margin-left: 13px;
+}
+
+.animate-key {
+  animation-name: animateScale;
+  animation-duration: 0.2s;
+  animation-iteration-count: 2;
+  animation-direction: alternate;  
+}
+
+@keyframes animateScale {
+  from  {transform: scale(1)}
+  to  {transform: scale(1.4)}
+  /* from  {border-radius: 0}
+  to  {border-radius: 10px;} */
 }
