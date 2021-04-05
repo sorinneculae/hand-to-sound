@@ -2,10 +2,12 @@ import configHands from '../config/configHands.js';
 import Hand from './Hand.js';
 
 export default class RightHand extends Hand {
+
+  activePoints = {};
+  points = [...configHands.rightHand.activationPoints];
+
   constructor(ctx, w, h) {
     super(ctx, w, h);
-    this.activePoints = {};
-    this.points = [...configHands.rightHand.activationPoints];
   }
   draw(handPoints) {
     this.points.forEach(point => {

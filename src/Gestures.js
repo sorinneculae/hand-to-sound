@@ -1,10 +1,12 @@
 export default class Gestures {
+  
+  lastBpm = Tone.Transport.bpm.value;
+  newBpm = Tone.Transport.bpm.value;
+  lastBpmYpos = 0;
+
   constructor(w, h) {
     this.w = w;
     this.h = h;
-    this.lastBpm = Tone.Transport.bpm.value;
-    this.newBpm = Tone.Transport.bpm.value;
-    this.lastBpmYpos = 0;
   }
 
   getGesture(type, points) {

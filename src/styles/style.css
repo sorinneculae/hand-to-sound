@@ -5,7 +5,7 @@ body {
   padding: 0;
   width: 100vw;
   height: 100vh;
-  font-family: 'Shadows Into Light';
+  /* font-family: 'Shadows Into Light'; */
 }
 
 main {
@@ -63,4 +63,19 @@ main {
 @keyframes animateScale {
   from  {transform: scale(1)}
   to  {transform: scale(1.4)}
+}
+
+.instrument-button {
+  background-color: lavender;
+  border: none;
+  color: darkslateblue;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 40px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
 }

@@ -1,12 +1,14 @@
 import configMusic from "./config/configMusic.js";
 
 export default class Music {
+
+  scale = [];
+  notePlayers = [];
+  noteOffset = (Tone.Time(configMusic.loopTime) / configMusic.howManyLines) * 6; 
+  scheduledNotes = {};
+  currentPlayer = 0;
+
   constructor() {
-    this.scale = [];
-    this.players = [];
-    this.noteOffset = (Tone.Time(configMusic.loopTime) / configMusic.howManyLines) * 6; 
-    this.scheduledNotes = {};
-    this.currentPlayer = 0;
     this.setScale();
     this.setPlayers();
     this.initializeLoop();
@@ -32,7 +34,7 @@ export default class Music {
         Tone.setContext(Tone.context);
         const player = new Tone.Player(buffer).toDestination();
         player.volume.value = -20;
-        this.players.push(player);
+        this.notePlayers.push(player);
       }
     });
   }
@@ -46,8 +48,8 @@ export default class Music {
     }
     if (elem.classList.contains('note-active')) {
       const scheduleId = Tone.Transport.schedule((time) => {
-        this.players[this.currentPlayer].start(time, x * this.noteOffset, this.noteOffset);
-        this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+        this.notePlayers[this.currentPlayer].start(time, x * this.noteOffset, this.noteOffset);
+        this.currentPlayer = (this.currentPlayer + 1) % this.notePlayers.length;
         elem.classList.add('animate-key');
         setTimeout(() => elem.classList.remove('animate-key'), 400);
       }, y * (Tone.Time(configMusic.loopTime) / configMusic.howManyLines));

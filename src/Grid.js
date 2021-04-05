@@ -1,11 +1,13 @@
 import configMusic from "./config/configMusic.js";
 
 export default class Grid {
+
+  elements = [];
+  gridNotes = {};
+
   constructor(container, scale) {
     this.container = container;
     this.scale = scale;
-    this.elements = [];
-    this.gridNotes = {};
   }
   draw() {
     const gridElem = document.getElementById('grid');

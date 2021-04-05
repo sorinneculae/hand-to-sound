@@ -7,28 +7,31 @@ import RightHand from "./hands/RightHand.js";
 import LeftHand from "./hands/LeftHand.js";
 import Grid from "./Grid.js";
 import Gestures from "./Gestures.js";
+import GestureClassifier from "./GestureClassifier.js";
 
 export default class App {
+
+  leftHand = null;
+  rightHand = null;
+  music = null;
+  gestures = null;
+  
+  videoDiv = null;
+  gridDiv = null;
+
+  canvasVideo = null;
+  ctxVideo = null;
+  canvasGrid = null;
+  ctxGrid = null;
+  canvasGesture = null;
+  ctxGesture = null;
+
+  canvasWidth = 0;
+  canvasHeight = 0;
+  originX = 0;
+  originY = 0;
+
   constructor() {
-    this.leftHand = null;
-    this.rightHand = null;
-    this.music = null;
-    this.gestures = null;
-    
-    this.videoDiv = null;
-    this.gridDiv = null;
-
-    this.canvasVideo = null;
-    this.ctxVideo = null;
-    this.canvasGrid = null;
-    this.ctxGrid = null;
-    this.canvasGesture = null;
-    this.ctxGesture = null;
-
-    this.canvasWidth = 0;
-    this.canvasHeight = 0;
-    this.originX = 0;
-    this.originY = 0;
     this.init();
   }
 
@@ -41,6 +44,7 @@ export default class App {
     this.initializeGrid();
     this.initializeHands();
     this.initializeGestures();
+    this.initializeGestureClassifier();
   }
 
   initializeHTMLElements() {
@@ -107,6 +111,16 @@ export default class App {
     this.gestures = new Gestures(this.canvasWidth, this.canvasHeight);
   }
 
+  initializeGestureClassifier() {
+    this.gestureClassifier = new GestureClassifier();
+  }
+
+  /**
+   * Draw hand points
+   * @param {Array} results - TBD
+   * @returns {number} - TBD
+   */
+
   drawHands(results) {
     this.ctxVideo.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     this.ctxGrid.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -124,6 +138,12 @@ export default class App {
     if (leftHandPoints.length) {
       this.leftHand.draw(leftHandPoints);
       this.gestures.getGesture('bpm', [leftHandPoints[4], leftHandPoints[8]]);
+      this.gestureClassifier.handInImage = true;
+      const imageData = this.ctxVideo.getImageData(this.canvasWidth/2, 0, this.canvasWidth/2, this.canvasHeight);
+      this.lastInstrument = -1;
+      this.gestureClassifier.animate(imageData);
+    } else {
+      this.gestureClassifier.handInImage = false;
     }
   }
 
