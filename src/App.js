@@ -140,7 +140,6 @@ export default class App {
       this.gestures.getGesture('bpm', [leftHandPoints[4], leftHandPoints[8]]);
       this.gestureClassifier.handInImage = true;
       const imageData = this.ctxVideo.getImageData(this.canvasWidth/2, 0, this.canvasWidth/2, this.canvasHeight);
-      this.lastInstrument = -1;
       this.gestureClassifier.animate(imageData);
     } else {
       this.gestureClassifier.handInImage = false;
