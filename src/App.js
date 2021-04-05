@@ -6,8 +6,8 @@ import HandDetection from "./hands/HandDetection.js";
 import RightHand from "./hands/RightHand.js";
 import LeftHand from "./hands/LeftHand.js";
 import Grid from "./Grid.js";
-import Gestures from "./Gestures.js";
-import GestureClassifier from "./GestureClassifier.js";
+import Gestures from "./gestures/Gestures.js";
+import GestureClassifier from "./gestures/GestureClassifier.js";
 
 export default class App {
 
