@@ -4,10 +4,12 @@ export default class Grid {
 
   elements = [];
   gridNotes = {};
+  clickCallback;
 
-  constructor(container, scale) {
+  constructor(container, scale, clickCallback) {
     this.container = container;
     this.scale = scale;
+    this.clickCallback = clickCallback;
   }
   draw() {
     const gridElem = document.getElementById('grid');
@@ -24,10 +26,10 @@ export default class Grid {
         toneDiv.setAttribute('y', y);
         toneDiv.setAttribute('note', currentNote);
   
-        // toneDiv.addEventListener('click', () => {
-        //   toneDiv.classList.toggle('note-active');
-        //   scheduleNote(toneDiv);
-        // });
+        toneDiv.addEventListener('click', () => {
+          toneDiv.classList.toggle('note-active');
+          this.clickCallback(toneDiv);
+        });
   
         toneDiv.classList.add('tone');
         octave.appendChild(toneDiv);

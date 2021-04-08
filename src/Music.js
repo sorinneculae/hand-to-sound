@@ -13,6 +13,7 @@ export default class Music {
   noteY = 0;
 
   constructor() {
+    Tone.Transport.bpm.value = configMusic.bpm;
     this.setScale();
     this.setPlayers();
     this.initializeLoop();
@@ -24,7 +25,6 @@ export default class Music {
       for (let j = 0; j < notes.length; j++) {
         this.scale.push(`${ notes[j] }${ i + configMusic.startingOctave }`);
       }
-      this.scale.reverse();
     }
   }
 

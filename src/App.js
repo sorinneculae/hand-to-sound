@@ -96,7 +96,7 @@ export default class App {
     this.canvasGrid.height = this.canvasHeight;
     this.gridDiv.style.width = `${this.canvasWidth}px`;
     this.gridDiv.style.height = `${this.canvasHeight}px`;
-    this.grid = new Grid(this.gridDiv, this.music.scale);
+    this.grid = new Grid(this.gridDiv, this.music.scale, this.music.startPlayer.bind(this.music));
     this.grid.draw();
   }
 
