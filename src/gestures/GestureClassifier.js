@@ -13,9 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import configMusic from "../config/configMusic.js";
+
 export default class GestureClassifier {
 
-  instruments = [0, 1, 2, 3, 4, 5];
+  instruments = [0, ...configMusic.instruments];
   // K value for KNN
   TOPK = 10;
   IMAGE_SIZE_W = 780;
@@ -23,15 +25,19 @@ export default class GestureClassifier {
 
   timer = 0;
   infoTexts = [];
+  buttons = [];
   training = false;
   handInImage = false;
 
-  lastInstrument = null;
+  lastInstrument = 1;
+
+  allGestures = {};
 
   knn = null;
   mobilenet = null;
-  
-  constructor() {
+
+  constructor(callbackTriggerInstrument) {
+    this.callbackTriggerInstrument = callbackTriggerInstrument;
     this.createButtons();
     // Initiate deeplearn.js math and knn classifier objects
     this.initClassifier();
@@ -62,9 +68,10 @@ export default class GestureClassifier {
       button.addEventListener('mouseup', () => this.training = false);
 
       // Create info text
-      const infoText = document.createElement('span')
+      const infoText = document.createElement('span');
       div.appendChild(infoText);
       this.infoTexts[i] = infoText;
+      this.buttons[i] = button;
     }
   }
 
@@ -80,9 +87,11 @@ export default class GestureClassifier {
     let logits;
     // 'conv_preds' is the logits activation of MobileNet.
     const infer = () => this.mobilenet.infer(image, 'conv_preds');
+    const allGesturesAreTrained = Object.keys(this.allGestures).length === (this.instruments.length - 1);
 
     // Train class if one of the buttons is held down
     if (this.training !== false) {
+      this.allGestures[this.training] = true;
       logits = infer();
       // Add current image to classifier
       this.knn.addExample(logits, this.training);
@@ -94,27 +103,27 @@ export default class GestureClassifier {
       // If classes have been added run predict
       logits = infer();
       const res = await this.knn.predictClass(logits, this.TOPK);
+      this.buttons[this.lastInstrument].classList.remove('active-instrument');
 
       for (let i = 1; i < this.instruments.length; i++) {
 
         // The number of examples for each class
         const exampleCount = this.knn.getClassExampleCount();
 
-        this.infoTexts[i].style.fontWeight = 'normal';
-
         // Update info text
         if (exampleCount[i] > 0) {
-          this.infoTexts[i].innerText = ` ${exampleCount[i]} - ${res.confidences[i] * 100}%`;
+          this.infoTexts[i].innerText = ` : ${exampleCount[i]}`;
 
-          if (res.confidences[i] === 1 && this.lastInstrument !== i) {
-            this.infoTexts[i].innerText = ` ${exampleCount[i]} - ${res.confidences[i] * 100}%`;
+          if (res.confidences[i] === 1 && this.lastInstrument !== i && allGesturesAreTrained) {
             this.lastInstrument = i;
-            console.log('this.lastInstrument: ', this.lastInstrument);
+            this.callbackTriggerInstrument(this.lastInstrument - 1);
           }
         }
       }
+      if (allGesturesAreTrained) {
+        this.buttons[this.lastInstrument || 1].classList.add('active-instrument');
+      }
     }
-    this.infoTexts[this.lastInstrument || 1].style.fontWeight = 'bold';
 
     // Dispose image when done
     image.dispose();

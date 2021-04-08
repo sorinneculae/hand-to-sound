@@ -7,13 +7,13 @@ const configMusic = {
     major: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
     harmonic_minor: ['A', 'B', 'C', 'D', 'E', 'F', 'G#']
   },
+  instruments: ['clap-1.ogg', 'closed-hh-1.ogg', 'kick-1.ogg'],
   startingOctave: 3,
   howManyOctaves: 2,
   howManyLines: 11,
   loopTime: '1m',
-  scale: 'classic',
-  instrument: null,
-  bpm: 120
+  scale: 'default',
+  bpm: 90
 }
 
 export default configMusic;

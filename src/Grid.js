@@ -24,12 +24,10 @@ export default class Grid {
         toneDiv.setAttribute('y', y);
         toneDiv.setAttribute('note', currentNote);
   
-        /*
-        toneDiv.addEventListener('click', () => {
-          toneDiv.classList.toggle('note-active');
-          scheduleNote(toneDiv);
-        });
-        */
+        // toneDiv.addEventListener('click', () => {
+        //   toneDiv.classList.toggle('note-active');
+        //   scheduleNote(toneDiv);
+        // });
   
         toneDiv.classList.add('tone');
         octave.appendChild(toneDiv);

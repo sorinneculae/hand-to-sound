@@ -5,7 +5,7 @@ body {
   padding: 0;
   width: 100vw;
   height: 100vh;
-  /* font-family: 'Shadows Into Light'; */
+  font-family: 'Shadows Into Light';
 }
 
 main {
@@ -30,6 +30,7 @@ main {
   align-items: flex-start;
   justify-content: flex-start;
   opacity: 0.6;
+  z-index: 1;
 }
 
 .octave {
@@ -41,11 +42,19 @@ main {
   padding-top: 20px;
 }
 
-.tone {
+.tone, .instrument-cell {
   width: 35px;
   height: 25px;
   box-sizing: border-box;
   background-color: white;
+  margin: 1px;
+  cursor: pointer;
+}
+
+.instrument-cell {
+  width: 15px;
+  text-align: center;
+  background-color: goldenrod;
   margin: 1px;
 }
 
@@ -74,8 +83,15 @@ main {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  width: 40px;
+  width: 100px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.active-instrument {
+  background-color: green;
+  color: white;
 }
