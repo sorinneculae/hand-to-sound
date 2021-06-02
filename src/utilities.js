@@ -115,10 +115,7 @@ export const checkTouch = (allPoints) =>  {
       if (!noteToPlay[note].active) {
         k.classList.add('key-active');
         noteToPlay[note].active = true;
-        sampler.triggerAttackRelease(letterNote, 4);
-        // synth1.triggerAttackRelease(letterNote, 0.5);
-        // synth2.triggerAttackRelease(letterNote, 0.5);
-        // synth3.triggerAttackRelease(letterNote, 0.5);
+        playNote(k);
       }
     } else {
       k.classList.remove('key-active');
@@ -154,6 +151,10 @@ export const drawOctave = (octaveIndex, startingNote, originX, originY) => {
     const toneDiv = document.createElement('div');
     toneDiv.setAttribute('note', note);
     toneDiv.setAttribute('letter-note', `${ letterNotes[i] }${ octaveIndex + 3 }`);
+
+    toneDiv.addEventListener('click', () => {
+      playNote(toneDiv);
+    });
       
     if (semiTonesIndex.includes(i)) {
       toneDiv.classList.add('semitone');
@@ -165,4 +166,12 @@ export const drawOctave = (octaveIndex, startingNote, originX, originY) => {
     allKeys.push(toneDiv);
     noteToPlay[note] = { note };
   }
+}
+
+const playNote = key => {
+  const letterNote = key.getAttribute('letter-note');
+  sampler.triggerAttackRelease(letterNote, 4);
+  // synth1.triggerAttackRelease(letterNote, 0.5);
+  // synth2.triggerAttackRelease(letterNote, 0.5);
+  // synth3.triggerAttackRelease(letterNote, 0.5);
 }

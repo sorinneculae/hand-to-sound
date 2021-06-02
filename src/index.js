@@ -1,6 +1,4 @@
-import './style.css';
-
-import { drawHand, drawOctave } from "./utilities";
+import { drawHand, drawOctave } from "./utilities.js";
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
