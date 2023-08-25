@@ -12,7 +12,7 @@ const configMusic = {
   howManyOctaves: 2,
   howManyLines: 11,
   loopTime: '1m',
-  scale: 'default',
+  scale: 'pentatonic',
   bpm: 90
 }
 

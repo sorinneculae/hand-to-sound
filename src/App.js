@@ -141,7 +141,7 @@ export default class App {
 
     if (leftHandPoints.length) {
       this.leftHand.draw(leftHandPoints);
-      // this.gestures.getGesture('bpm', [leftHandPoints[4], leftHandPoints[8]]);
+      this.gestures.getGesture('bpm', [leftHandPoints[4], leftHandPoints[8]]);
       this.gestureClassifier.handInImage = true;
       const imageData = this.ctxVideo.getImageData(this.canvasWidth/2, 0, this.canvasWidth/2, this.canvasHeight);
       this.gestureClassifier.animate(imageData);
